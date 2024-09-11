@@ -54,7 +54,7 @@ public class Main {
 				if(map[i][j] == 0) {
 					map[i][j] = 1;
 					combination(depth+1);
-					map[i][j] = 0;
+					map[i][j] = 0; //visited 를 map에다가 0과 1로 표현했다.
 				}
 			}
 		}
@@ -93,6 +93,7 @@ public class Main {
 				int ny = curY + dy[dic];
 				if(nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
 				if(copyMap[nx][ny] == 1) continue;
+				// copyMap[nx][ny] == 2는 어차피 큐에 사전에 넣어줘서 또 넣어줄 필요없다.
 				if(copyMap[nx][ny] == 0) {
 					copyMap[nx][ny] = 2;
 					q.add(new int[] {nx, ny});
