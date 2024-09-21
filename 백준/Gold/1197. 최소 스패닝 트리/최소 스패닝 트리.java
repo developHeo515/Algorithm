@@ -32,45 +32,45 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			
-			V = Integer.parseInt(st.nextToken());
-			E = Integer.parseInt(st.nextToken());
-			
-			parents = new int[V+1];
-			nodeList = new ArrayList<>();
-			
-			for(int i = 0; i < E; i++) {
-				st = new StringTokenizer(br.readLine());
-				int from = Integer.parseInt(st.nextToken());
-				int to = Integer.parseInt(st.nextToken());
-				int cost = Integer.parseInt(st.nextToken());
-				nodeList.add(new Node(from, to, cost));
-			}
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		V = Integer.parseInt(st.nextToken());
+		E = Integer.parseInt(st.nextToken());
+		
+		parents = new int[V+1];
+		nodeList = new ArrayList<>();
+		
+		for(int i = 0; i < E; i++) {
+			st = new StringTokenizer(br.readLine());
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+			int cost = Integer.parseInt(st.nextToken());
+			nodeList.add(new Node(from, to, cost));
+		}
 //			System.out.println(nodeList);
-			Collections.sort(nodeList);
+		Collections.sort(nodeList);
 //			System.out.println(); 
 //			System.out.println(nodeList);
-			
-			make();
-			
-			int sum = 0;
-			int cnt = 0;
-			
+		
+		make();
+		
+		long sum = 0;
+		long cnt = 0;
+		
 //			for(Node n : nodeList) {
 //				System.out.println(n.from +" "+n.to +" "+n.cost);
 //			}
-			for(Node n : nodeList) {
-				if(union(n.from, n.to)) {
-					sum+= n.cost;
-					cnt++;
-					
-					if(cnt == V-1) break;  //여기 E-1을 V-1로 고침
-				}
+		for(Node n : nodeList) {
+			if(union(n.from, n.to)) {
+				sum+= n.cost;
+				cnt++;
+				
+				if(cnt == V-1) break;  //여기 E-1을 V-1로 고침
 			}
-			
+		}
+		
 //			sb.append("#").append(tc).append(" ").append(sum).append("\n");
-		    System.out.println(sum);
+	    System.out.println(sum);
 	}
 	
 	static boolean union(int from, int to) {
