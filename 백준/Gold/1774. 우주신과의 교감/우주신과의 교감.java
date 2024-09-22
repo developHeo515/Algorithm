@@ -31,7 +31,7 @@ public class Main {
 		}
 	}
 	static int N, M;
-	static double ans = 0.0;
+	static double ans = 0;
 	static int[] parent;
 	static ArrayList<Node> nodeList;
 	public static void main(String[] args) throws IOException {
@@ -66,10 +66,10 @@ public class Main {
 				int to = j;
 				
 				// 2차원 두 점 사이의 거리 구하기
-//				double x_dist = Math.pow(arr[to][0] - arr[from][0], 2);
-//				double y_dist = Math.pow(arr[to][1] - arr[from][1], 2);
-	            double cost = Math.sqrt(Math.pow(arr[to][0] - arr[from][0], 2) + Math.pow(arr[to][1] - arr[from][1], 2));
-//				double cost = Math.sqrt(x_dist + y_dist);
+				double x_dist = Math.pow(arr[to][0] - arr[from][0], 2);
+				double y_dist = Math.pow(arr[to][1] - arr[from][1], 2);
+				double cost = Math.sqrt(x_dist + y_dist);
+//	            double cost = Math.sqrt(Math.pow(arr[to][0] - arr[from][0], 2) + Math.pow(arr[to][1] - arr[from][1], 2));
 //				System.out.println(cost);
 				nodeList.add(new Node(from, to, cost)); //유니온 파인드를 사용하기 위해 Node class 형태로 넣는다.
 			}
