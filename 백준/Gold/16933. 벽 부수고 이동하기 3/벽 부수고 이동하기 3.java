@@ -78,6 +78,7 @@ public class Main {
 					if(check[nextSun][w][nextX][nextY] == 0) { //이걸 빼먹고 안해줬음
 						q.add(new int[] {nextSun, w, nextX, nextY});
 						check[nextSun][w][nextX][nextY] = check[sun][w][curX][curY] + 1;
+						check[sun][w][nextX][nextY] = check[sun][w][curX][curY] + 1; //이거 넣으면 되는지 실험
 						if(nextX == N && nextY == M) {
 							return check[nextSun][w][nextX][nextY];
 						}
@@ -88,6 +89,7 @@ public class Main {
 						if(check[nextSun][w+1][nextX][nextY] == 0) { //벽 부술 때도 이거 해줘야함 - 이걸 빼먹고 안해줬음
 							q.add(new int[] {nextSun, w+1, nextX, nextY});
 							check[nextSun][w+1][nextX][nextY] = check[sun][w][curX][curY] + 1;
+							check[sun][w+1][nextX][nextY] = check[sun][w][curX][curY] + 1; //이거 넣으면 되는지 실험
 						}
 					}else { //더 이상 벽을 못 깰 때
 						continue;
