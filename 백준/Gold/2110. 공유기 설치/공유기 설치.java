@@ -5,46 +5,53 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		int N = Integer.parseInt(st.nextToken());
+		int C = Integer.parseInt(st.nextToken());
+		int[] homeList = new int[N+1];
+		
+		for(int i = 1; i <= N; i++) {
+			int n = Integer.parseInt(br.readLine());
+			homeList[i] = n;
+		}
+		Arrays.sort(homeList);
+		
+		int left = 1;
+		int right = homeList[N] - homeList[1];
+		int d = 0;
+		int ans = 0;
+		
+		while(left <= right) {
+			int mid = (left + right) / 2; //최소 거리 설정
+			
+			int start = homeList[1]; //첫 공유기부터 시작
+			int cnt = 1; //이미 시작 부분에 한 개 설치했다고 가정
+			for(int i = 1; i <= N; i++) {
+				d = homeList[i] - start;
+				if(d >= mid) {
+					cnt++;
+					start = homeList[i];
+				}
 
-        int N = input.nextInt();  // 집의 개수
-        int C = input.nextInt();  // 공유기의 개수
-        int[] homeList = new int[N + 1];
-
-        for (int i = 1; i <= N; ++i) {
-            homeList[i] = input.nextInt();
-        }
-
-        Arrays.sort(homeList);   // 정렬
-
-        int maxResult = 0;
-
-        int left = 1;
-        int right = homeList[N] - homeList[1];
-        int d = 0;
-        int ans = 0;
-
-        while (left <= right) {
-            int mid = (left + right) / 2;
-            int start = homeList[1];
-            int count = 1;  // 공유기 설치 GAP 저장
-            for (int i = 1; i <= N; ++i) {
-                d = homeList[i] - start;  // 집마다 거리 체크
-                if (d >= mid) {  // 공유기 설치 가능한지 여부 체크
-                    count++;
-                    start = homeList[i]; // 설치 했다면 여기 집 부터 다시 거리 체크
-                }
-            }
-
-            if (count >= C) {
-                ans = mid;
-                left = mid + 1;  // 더 많은 Gap에서 공유기 설치할 수 있는지 여부 확인
-            } else {
-                right = mid - 1; // 더 적은 Gap에서 공유기 설치할 수 있는지 여부 확인
-            }
-        }
-
-        System.out.println(ans);
-    }
+			}
+//			System.out.println(cnt + " " + left + " " + right);
+			if(cnt >= C) { // 설치된 공유기 수가 가지고 있는 공유기의 수보다 적으면
+				ans = mid;
+				left = mid + 1;
+			}else {
+				right = mid - 1;
+			}
+			
+		}
+		
+		bw.write(ans+"\n");
+		
+		bw.flush();
+		bw.close();
+		br.close();
+	}
 }
