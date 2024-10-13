@@ -1,19 +1,10 @@
 //BOJ1697 숨바꼭질, 실버1
-//1차원 배열을 활용한 BFS
 import java.io.*;
 import java.util.*;
 
 public class Main {
-	static class P{
-		int location;
-		int cnt;
-		public P(int location, int cnt) {
-			this.location = location;
-			this.cnt = cnt;
-		}
-	}
-	static int[] point;
 	static int N, K, time;
+	static int[] point, parent;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -21,60 +12,45 @@ public class Main {
 		
 		N = Integer.parseInt(st.nextToken());
 		K = Integer.parseInt(st.nextToken());
-		point = new int[100000+1];
+		time = 0;
+		point = new int[100001];
+		parent = new int[100001];
 		
 		time = bfs();
-		
-		bw.write(time+"\n");
+	
+		bw.write(time + "\n");
 		bw.flush();
 		bw.close();
 		br.close();
 	}
 	static int bfs() {
-		if(N == K) return 0; // 0, 0일 때 예외 케이스 처리해줘야한다.
-		Queue<P> q = new LinkedList<>();
-		q.add(new P(N, 0));
+		if(N == K) return 0;
+		Queue<Integer> q = new LinkedList<>();
+		q.add(N);
+		point[N] = 1; //구분을 위해 해둠
 		
 		while(!q.isEmpty()) {
-			P cur = q.poll();
-			int location = cur.location;
-			int cnt = cur.cnt;
+			int cur = q.poll();
+			int next;
 			
-//			System.out.print(location  +  "-");
-			
-			if(location-1 >= 0) {
-				if(point[location-1] == 0 && location-1 != N) { //이동한 위치가 수빈이 원래 위치 아니라면 1초후 X-1로 이동
-					if(location-1 ==  K) { //동생위치 찾았을 때
-						time = cnt+1;
-						return time;
-					}
-					point[location-1] = cnt+1;
-					q.add(new P(location-1, cnt+1));
+			for(int i = 0; i < 3; i++) {
+				if(i == 0) next = cur - 1;
+				else if(i == 1) next = cur + 1;
+				else next = cur * 2;
+				
+				if(next < 0 || next > 100000) continue;
+				if(next == K) {
+					return point[cur];
+				}else if(point[next] != 0) { //방문한적있을때
+					continue;
+				}else if(point[next] == 0) {
+					point[next] = point[cur] + 1;
+					q.add(next);
 				}
 			}
 			
-			if(location+1 <= 100000) {
-				if(point[location+1] == 0 && location+1 != N) { //이동한 위치가 수빈이 원래 위치 아니라면 1초후 X+1로 이동
-					if(location+1 ==  K) { //동생위치 찾았을 때
-						time = cnt+1;
-						return time;
-					}
-					point[location+1] = cnt+1;
-					q.add(new P(location+1, cnt+1));
-				}
-			}
-			
-			if(location * 2 <= 100000) {
-				if(point[location*2] == 0 && location*2 != N) { //이동한 위치가 수빈이 원래 위치 아니라면 1초후 2*X로 이동
-					if(location*2 ==  K) { //동생위치 찾았을 때
-						time = cnt+1;
-						return time;
-					}
-					point[location*2] = cnt +1;
-					q.add(new P(location*2, cnt+1));
-				}
-			}
 		}
+		
 		return -1;
 	}
 }
