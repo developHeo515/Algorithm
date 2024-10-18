@@ -1,5 +1,8 @@
 //BOJ1504 특정한 최단 경로, 골드4
 //다익스트라
+//에러 원인 - ans 누적합 과정에서 생겼다
+//두 가지 경로의 값을 비교할 때 각각 별도의 변수를 사용해 계산하고, 그 결과를 비교해야 합니다. 
+//예를 들어, 두 경로를 각각 따로 저장하고 마지막에 비교하는 방식으로 코드를 수정
 import java.io.*;
 import java.util.*;
 
@@ -18,7 +21,6 @@ public class Main {
 	}
 	static int N, E, ans;
 	static int[] dist;
-	static boolean[] check; // 방문 확인.
 	static int INF = 200000000;
 	static ArrayList<Node>[] nodeList;
 	public static void main(String[] args) throws IOException {
@@ -29,7 +31,6 @@ public class Main {
 		N = Integer.parseInt(st.nextToken());
 		E = Integer.parseInt(st.nextToken());
 		dist = new int[N+1];
-        check = new boolean[N + 1];
 		nodeList = new ArrayList[N+1];
 		for(int i = 1; i <= N; i++) {
 			nodeList[i] = new ArrayList<>();
@@ -68,28 +69,19 @@ public class Main {
 		br.close();
 	}
 	static int dijkstra(int start, int end) {
-		if(start == end) {
-			return 0;
-		}
 		Arrays.fill(dist, INF);
-        Arrays.fill(check, false);
 		
 		PriorityQueue<Node> pq = new PriorityQueue<>();
 		pq.add(new Node(start, 0));
 		dist[start] = 0;
-		boolean[] check = new boolean[N + 1];
 		
 		while(!pq.isEmpty()) {
 			Node curNode = pq.poll();
 			int cur = curNode.to;
 			int cost = curNode.cost;
 			
-            if (!check[cur]) {
-                check[cur] = true;
-            }
-			
 			for(Node next : nodeList[cur]) {
-				if(!check[next.to] && dist[next.to] > dist[cur] + next.cost) {
+				if(dist[next.to] > dist[cur] + next.cost) {
 					dist[next.to] = dist[cur] + next.cost;
 					pq.add(new Node(next.to, dist[next.to]));
 				}
