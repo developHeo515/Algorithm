@@ -63,9 +63,9 @@ public class Main {
 //					System.out.println("시작"+N+ " " + endN+ " "+M+" "+endM);
 					for(int x = i; x <= i; x++) {
 						for(int y = M + 1; y < endM; y++) {
-							if(map[x][y] == 0 && !visited[x][y]) {
+							visited[x][y] = true;
+							if(map[x][y] == 0) {
 //								System.out.println(x + " " + y);
-								visited[x][y] = true;
 								ans++;
 							}
 						}
