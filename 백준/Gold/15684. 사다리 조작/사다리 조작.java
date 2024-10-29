@@ -10,16 +10,10 @@ import java.util.*;
 
 public class Main {
 	static class Ladder {
-		int x;
-		int y;
 		boolean visit;
-		int moveX;
 		int moveY;
-		public Ladder(int x, int y, boolean visit, int moveX, int moveY) {
-			this.x = x;
-			this.y = y;
+		public Ladder(boolean visit, int moveY) {
 			this.visit = visit;
-			this.moveX = moveX;
 			this.moveY = moveY;
 		}
 	}
@@ -39,7 +33,7 @@ public class Main {
 		
 		for(int i = 1; i <= H; i++) {
 			for(int j = 1; j <= N; j++) {
-				arr[i][j] = new Ladder(i, j, false, i, j);
+				arr[i][j] = new Ladder(false, j);
 			}
 		}
 		
@@ -49,8 +43,8 @@ public class Main {
 			int a = Integer.parseInt(st.nextToken());
 			int b = Integer.parseInt(st.nextToken());
 			//사다리 연결
-			arr[a][b] = new Ladder(a, b, true, a, b+1);
-			arr[a][b+1] = new Ladder(a, b+1, true,  a, b);
+			arr[a][b] = new Ladder(true, b+1);
+			arr[a][b+1] = new Ladder(true, b);
 //			System.out.println(arr[a][b+1].moveX + " " + arr[a][b+1].moveY);
 		}
 		
@@ -90,12 +84,9 @@ public class Main {
 			
 			for(int j = 1; j <= H; j++) {
 				if(arr[j][curY].visit) { //사다리 있으니 옮긴 위치로 내려가서 넣어줌
-//					System.out.println(arr[j][curY].moveX + " " +arr[j][curY].moveY);
 					curY = arr[j][curY].moveY;
-//					System.out.println(curY);
 				}
 			}
-//			System.out.println();
 			if(curY != goalY) {
 				flag = false;
 				break; //시간초과 9% 해결시도 1
@@ -126,8 +117,8 @@ public class Main {
 					if(arr[i][j+1].visit) continue;
 					
 					//new Ladder로 넣어줌
-					arr[i][j] = new Ladder(i, j, true, i, j+1);
-					arr[i][j+1] = new Ladder(i, j+1, true, i, j);
+					arr[i][j] = new Ladder(true, j+1);
+					arr[i][j+1] = new Ladder(true, j);
 					
 					//이렇게 사다리 맵 고치니 값이 제대로 안들어가서 new Ladder로 넣어줌
 //						arr[i][j].moveY = j+1;
@@ -141,9 +132,5 @@ public class Main {
 				}
 			}
 		}
-		
-		
-
-		
 	}
 }
