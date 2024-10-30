@@ -1,4 +1,9 @@
 //BOJ15661 링크와 스타트
+//BOJ14889 스타트와 링크는 정확히 N/2 로 팀이 나눠진다.
+//이문제는 홀수로 팀을 나눌 수 있기에 한팀에 최소 1명일때부터 N-1명 일때까지 DFS를 돌리면 된다.
+//for(t = 1; t < N; t++) {
+//	dfs(1, 0);
+//}
 import java.io.*;
 import java.util.*;
 
@@ -32,7 +37,7 @@ public class Main {
 //			System.out.println();
 //		}
 		
-		for(t = 1; t <= N; t++) {
+		for(t = 1; t < N; t++) {
 			dfs(1, 0);
 		}
 			
