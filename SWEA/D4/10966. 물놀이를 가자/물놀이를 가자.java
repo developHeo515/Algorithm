@@ -2,8 +2,6 @@
 import java.io.*;
 import java.util.*;
 
-import org.w3c.dom.Text;
-
 public class Solution {
 	static class Water {
 		int x, y;
@@ -62,16 +60,8 @@ public class Solution {
 							dist[nextX][nextY] = dist[curX][curY] + 1;
 							WQ.add(new Water(nextX, nextY));
 						}
-//						else {
-//							continue;
-//						}
-//						WQ.add(new Water(nextX, nextY));
 					}
-					
-
 				}
-				
-				
 			}
 
 //			for (int i = 0; i < N; i++) {
@@ -92,33 +82,5 @@ public class Solution {
 		bw.flush();
 		bw.close();
 		br.close();
-	}
-
-	static void bfs(int initX, int initY) {
-		Queue<int[]> q = new LinkedList<>();
-		q.add(new int[] { initX, initY });
-		boolean[][] visited = new boolean[N][M];
-		dist[initX][initY] = 0;
-		visited[initX][initY] = true;
-
-		while (!q.isEmpty()) {
-			int[] cur = q.poll();
-			int curX = cur[0];
-			int curY = cur[1];
-
-			for (int dic = 0; dic < 4; dic++) {
-				int nextX = curX + dx[dic];
-				int nextY = curY + dy[dic];
-				if (nextX < 0 || nextY < 0 || nextX >= N || nextY >= M) continue;
-				if (visited[nextX][nextY]) continue;
-
-				if (dist[nextX][nextY] > dist[curX][curY] + 1) {
-					dist[nextX][nextY] = dist[curX][curY] + 1;
-					q.add(new int[] {nextX, nextY});
-					visited[nextX][nextY] = true;
-				}
-			}
-
-		}
 	}
 }
