@@ -1,91 +1,124 @@
-//10966. 물놀이를 가자 D4
-//문제를 풀며 보완한 점
-//- 클래스 사용에 적응할 수 있었음
-//- Queue에 클래스 타입을 줘서 사용해봄
-//- 2차원 char 배열을 String을 chatAt으로 값을 할당
-//- bfs & 4방탐색을 통해 노드 간에 길이를 구하는 방법 터득(배열 활용해서)
-
+//SWEA10966 물놀이를 가자, D4
 import java.io.*;
 import java.util.*;
- 
+
+import org.w3c.dom.Text;
+
 public class Solution {
-    public static class Pair{
-        int x, y;
-        Pair(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
-    }
-     
-    static int N, M, total;
-    static char[][]map;
-    static int[][]res;
-    static int[] dx = {1, 0, -1, 0}; //우 하 좌 상
-    static int[] dy = {0, 1, 0, -1};
-    static Queue<Pair> q = new LinkedList<>();
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        StringBuilder sb = new StringBuilder();
-         
-        int T = Integer.parseInt(br.readLine());
-        for(int test_case = 1; test_case <= T; test_case++) {
-            st = new StringTokenizer(br.readLine());
-            N = Integer.parseInt(st.nextToken());
-            M = Integer.parseInt(st.nextToken());
-            map = new char[N][M];
-            res = new int[N][M];
-            total = 0;
-             
-//          System.out.println(Arrays.deepToString(map));
-//          System.out.println(Arrays.deepToString(check));
-            for(int i = 0; i < N; i++) {
-                String temp = br.readLine();
-                for(int j = 0; j < M; j++) {
-                    map[i][j] = temp.charAt(j);
-                }
-            }
-             
-            for(int i = 0; i < N; i++) {
-                for(int j = 0; j < M; j++) {
-                    if(map[i][j] == 'W') {
-                        q.add(new Pair(i, j));
-                    }
-                }
-            }
-             
-            while(!q.isEmpty()) {
-                Pair test = q.poll();
-//              System.out.println(test.y +" " + test.x);
-                 
-                for(int i = 0; i < 4; i++) {
-                    int nx = test.x + dx[i];
-                    int ny = test.y + dy[i];
-                    if(nx < 0 || ny < 0 || nx >= N || ny >= M) 
-                        continue;
-//                  System.out.println("방향성 확인 : "+ny + " " + nx);
-                    if(map[nx][ny] == 'L') {
-                        if(res[test.x][test.y]+1 < res[nx][ny] || res[nx][ny]==0) {
-                            res[nx][ny] = res[test.x][test.y]+1;
-                        }else {
-                            continue;
-                        }
-                        q.offer(new Pair(nx, ny));
-                    }
-                     
-                }
-                 
-            }
-             
-            for(int i = 0; i < N; i++) {
-                for(int j = 0; j < M; j++) {
-                    total += res[i][j];
-                }
-            }
-             
-            sb.append("#").append(test_case).append(" ").append(total+"\n");
-         
-        }
-        System.out.println(sb);
-    }
+	static class Water {
+		int x, y;
+
+		public Water(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
+
+	static int N, M;
+	static char[][] map;
+	static int[][] dist;
+//	static ArrayList<Water> WQ;
+	static Queue<Water> WQ = new LinkedList<>();
+	static int[] dx = { 0, 1, 0, -1 }; // 우 하 좌 상
+	static int[] dy = { 1, 0, -1, 0 };
+	static final int INF = 987654321;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
+
+		int T = Integer.parseInt(br.readLine());
+		for (int tc = 1; tc <= T; tc++) {
+			st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());
+			M = Integer.parseInt(st.nextToken());
+
+			map = new char[N][M];
+			dist = new int[N][M];
+			for (int i = 0; i < N; i++) {
+				String temp = br.readLine();
+				for (int j = 0; j < M; j++) {
+					char ch = temp.charAt(j);
+					if (ch == 'W') {
+						WQ.add(new Water(i, j));
+					}
+					map[i][j] = ch;
+				}
+			}
+
+			while(!WQ.isEmpty()) {
+				Water test = WQ.poll();
+				int curX = test.x;
+				int curY = test.y;
+				
+				for (int dic = 0; dic < 4; dic++) {
+					int nextX = test.x + dx[dic];
+					int nextY = test.y + dy[dic];
+					if (nextX < 0 || nextY < 0 || nextX >= N || nextY >= M) continue;
+
+					if(map[nextX][nextY] == 'L') {
+						if (dist[nextX][nextY] > dist[curX][curY] + 1 || dist[nextX][nextY] == 0) {
+							dist[nextX][nextY] = dist[curX][curY] + 1;
+							WQ.add(new Water(nextX, nextY));
+						}
+//						else {
+//							continue;
+//						}
+//						WQ.add(new Water(nextX, nextY));
+					}
+					
+
+				}
+				
+				
+			}
+
+//			for (int i = 0; i < N; i++) {
+//				for (int j = 0; j < M; j++) {
+//					System.out.print(dist[i][j] + " ");
+//				}
+//				System.out.println();
+//			}
+			int ans = 0;
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < M; j++) {
+					ans += dist[i][j];
+				}
+			}
+			bw.write("#" + tc + " " + ans + "\n");
+		}
+
+		bw.flush();
+		bw.close();
+		br.close();
+	}
+
+	static void bfs(int initX, int initY) {
+		Queue<int[]> q = new LinkedList<>();
+		q.add(new int[] { initX, initY });
+		boolean[][] visited = new boolean[N][M];
+		dist[initX][initY] = 0;
+		visited[initX][initY] = true;
+
+		while (!q.isEmpty()) {
+			int[] cur = q.poll();
+			int curX = cur[0];
+			int curY = cur[1];
+
+			for (int dic = 0; dic < 4; dic++) {
+				int nextX = curX + dx[dic];
+				int nextY = curY + dy[dic];
+				if (nextX < 0 || nextY < 0 || nextX >= N || nextY >= M) continue;
+				if (visited[nextX][nextY]) continue;
+
+				if (dist[nextX][nextY] > dist[curX][curY] + 1) {
+					dist[nextX][nextY] = dist[curX][curY] + 1;
+					q.add(new int[] {nextX, nextY});
+					visited[nextX][nextY] = true;
+				}
+			}
+
+		}
+	}
 }
