@@ -1,5 +1,5 @@
-
 //BOJ2146 다리 만들기, 골드3
+// BFS를 활용하는 문제
 import java.io.*;
 import java.util.*;
 
