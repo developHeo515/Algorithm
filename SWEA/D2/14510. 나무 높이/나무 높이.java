@@ -1,64 +1,57 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+//SWEA14510 나무 높이, D2 
+import java.io.*;
+import java.util.*;
 
-/**
- * SWEA 14150. 나무 높이
- * @category 그리디
- */
-public class Solution {
-
-	public static void main(String[] args) throws Exception {
+public class Solution{
+	static int ans;
+	static int N;
+	static int[] tree;
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
 		
 		int T = Integer.parseInt(br.readLine());
-		for(int tc = 1; tc <= T; tc++)
-		{
-			int N = Integer.parseInt(br.readLine());
+		for(int tc = 1; tc <= T; tc++) {
+			ans = 0;
+			N = Integer.parseInt(br.readLine());
+			tree = new int[N];
+			int max = 0;
+			int one = 0;
+			int two = 0;
 			
 			st = new StringTokenizer(br.readLine());
 			
-			int max = 0; //가장 큰 나무의 높이
-			int[] trees = new int[N];
-			for (int i = 0; i < N; i++) {
-				int t = Integer.parseInt(st.nextToken());
-				trees[i] = t;
-				
-				max = Math.max(max, t);
+			for(int i = 0; i < N; i++) {
+				int num = Integer.parseInt(st.nextToken());
+				max = Math.max(max, num);
+				tree[i] = num;
 			}
 			
-			//나무가 자라야 할 높이에서 필요한 1, 2의 개 수 구하기
-			int even = 0, odd = 0;
-			for (int i = 0; i < N; i++) {
-				int diff = max - trees[i];
-				
-				if(diff == 0) continue;
-				
-				even += diff / 2;
-				odd += diff % 2;
+			for(int i = 0; i < N; i++) {
+				int diff = max - tree[i];
+				one += diff % 2;
+				two += diff / 2;
+			}
+
+			if(two - one >= 2) {
+				int diff = two - one;
+				int move = (diff + 1) / 3;
+				one += move * 2;
+				two -= move;
 			}
 			
-			//2 -> 1로 변경
-			if(even > odd) {
-				while(Math.abs(even - odd) > 1) {
-					even--;
-					odd += 2;
-				}
+			ans = two * 2;
+			if(one > two) {
+				ans += (one - two - 1) * 2 + 1;
 			}
 			
-			int result = 0;
-			if(odd > even) { //1이 많을 경우
-				result = odd * 2 - 1;
-				
-			} else if(even > odd) { //2가 많을 경우 
-				result = even * 2;
-				
-			} else { //1과 2의 숫자가 같을 경우
-				result = odd + even;
-			}
-			
-			System.out.println("#" + tc + " " + result);
+			bw.write("#" + tc + " " + ans + "\n");
 		}
+				
+		
+		bw.flush();
+		bw.close();
+		br.close();
 	}
 }
