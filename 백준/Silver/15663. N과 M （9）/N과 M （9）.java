@@ -1,61 +1,55 @@
+//BOJ15663 N과 M(9)
+//HashSet 사용하지 않는 방법
 import java.io.*;
 import java.util.*;
 
 public class Main {
 	static int N, M;
-	static Integer[] input;
-	static Integer[] res;
-	static boolean[] toSelected;
-	static LinkedHashSet<String> set;
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
+	static int[] arr, selected;
+	static boolean[] visited;
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	public static void main(String[] args) throws IOException{
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
-		
-		input = new Integer[N];
-		res = new Integer[M];
-		toSelected = new boolean[N];
+		arr = new int[N];
+		visited = new boolean[N];
+		selected = new int[M];
 		
 		st = new StringTokenizer(br.readLine());
 		for(int i = 0; i < N; i++) {
-			input[i] = Integer.parseInt(st.nextToken());
+			arr[i] = Integer.parseInt(st.nextToken());
 		}
-		Arrays.sort(input);
-		set  = new LinkedHashSet<>();
-//		Arrays.sort(input, Collections.reverseOrder());
-//		System.out.println(Arrays.toString(input));
+		Arrays.sort(arr);
 		
-		dfs(0);
-//		System.out.println(set);
-		set.forEach(System.out::println);
+		
+		func(0);
+		bw.flush();
+		bw.close();
+		br.close();
 	}
-	static void dfs(int depth) {
+	static void func(int depth) throws IOException {
 		if(depth == M) {
-			String temp = "";
-			for(Integer num : res) {
-				temp += num+" ";
+			for(int i = 0; i < M; i++) {
+				bw.write(selected[i] + " ");
 			}
-			set.add(temp);
+			bw.write("\n");
 			return;
 		}
 		
+		int before = 0;
 		for(int i = 0; i < N; i++) {
-			if(!toSelected[i]) {
-				toSelected[i] = true;
-				res[depth] = input[i];
-				dfs(depth+1);
-				toSelected[i] = false;
+			if(!visited[i]) {
+				if(before != arr[i]) {
+					visited[i] = true;
+					selected[depth] = arr[i];
+					before = arr[i];
+					func(depth+1);			
+					visited[i] = false;
+				}
+
 			}
-			
 		}
-		
 	}
 }
-
-
-
-
