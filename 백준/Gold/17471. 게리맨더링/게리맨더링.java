@@ -1,146 +1,140 @@
-//BOJ 17471 게리맨더링 골드3
-// 3시간 걸렸다.. 
-//문제점 
-//- ArrayList를 활용한 2차원 배열에 대해 사용이 미숙하다.
-//- get() 함수 사용할때 자꾸 배열 쓸 때랑 헷갈려서 index 에러 이슈
-//조합 만들때 return 꼭 넣기.. 까먹는다 자꾸
-//1~N까지 구역을 2개의 선거구로 나눠주기 (부분집합)
-// 2개 선거구 area에 인구수 넣어주는 거를 위치 인덱스 넣어주기로 변경
-//나눠준 선거구 내에서 구역들이 전부 연결되었는지 확인 (그래프 탐색 - BFS)
-//전부 연결되어 있으면 인구차 구하기
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class Main {
-	static int N;
-	static int diffCnt;
-	static int[] population;
-	static ArrayList<Integer>[] graph;
-	static boolean[] isSelected;
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-	    StringTokenizer st;
-	    
-	    N = Integer.parseInt(br.readLine());
-	    diffCnt = Integer.MAX_VALUE;
-	    population = new int[N+1];
-	    isSelected = new boolean[N+1];
-	    
-	    //그래프 초기화
-	    graph = new ArrayList[N+1];
-	    for(int i = 1; i <= N; i++) {
-	    	graph[i] = new ArrayList<>();
-	    }
+    /**
+     * 게리맨더링
+     *
+     * 풀이: 방향이 없는 그래프로 인접리스트연결하고,
+     *      부분집합으로 두 집합으로 나눈뒤, DFS로 연결되어 있는지 확인한 후 차이 최솟값 구하기
+     *
+     * 1. 인풋값 받기(N, population[N], 인접 정보)
+     * 2. 인접리스트 연결하기
+     * 3. 부분집합으로 두 집합으로 나눠보기
+     * 4. DFS로 연결되어 있는지 확인하기
+     * 5. 최소값 update
+     */
+    static int N;
+    static int[] population;
+    static ArrayList<Integer>[] adj;
+    static boolean[] seleted;  //부분집합 두 집합으로 나누기 위한 용도
+    static boolean[] visited;  //DFS 방문처리
+    static int min = Integer.MAX_VALUE;
 
+    static BufferedReader br;
+    static StringTokenizer st;
 
-	    //인구수 등록
-	    st = new StringTokenizer(br.readLine());
-	    for(int i = 1; i <= N; i++) {
-	    	population[i] = Integer.parseInt(st.nextToken());
-	    }
-//	    System.out.println(Arrays.toString(population));
-	    
-	    //각 구역마다 인접한 구역 연결
-	    for(int i = 1; i <= N; i++) {
-	    	st = new StringTokenizer(br.readLine());
-	    	int vertex = Integer.parseInt(st.nextToken());
-	    	for(int j = 1; j <= vertex; j++) {
-	    		graph[i].add(Integer.parseInt(st.nextToken()));
-	    	}
-	    }
-//	    System.out.println(Arrays.toString(graph));
-	    
-	    generateSubset(1);
-	    
-	    bw.write((diffCnt == Integer.MAX_VALUE ? -1 : diffCnt)+"\n");
-	    bw.flush();
-	    bw.close();
-	    br.close();
-	}
-	
-	//부분 집합 만드는 함수
-	static void generateSubset(int depth) {
-		if(depth == N+1) {
-			ArrayList<Integer> areaA = new ArrayList<>();
-			ArrayList<Integer> areaB = new ArrayList<>();
-			
-			for(int i = 1; i <= N; i++) {
-				if(isSelected[i]) {
-					areaA.add(i); //인구수 넣어주는 거에서 위치 인덱스 넣어주기로 변경
-				} else {
-					areaB.add(i); //인구수 넣어주는 거에서 위치 인덱스 넣어주기로 변경
-				}
-			}
-			
-			if(areaA.size() == 0 || areaB.size() == 0)
-				return;
-			
-			if(check(areaA) && check(areaB)) {
-				calc(areaA, areaB);
-			}
-			
-			return;
-		}
-		
-		// true는 A구역에 넣겠다는 뜻
-		isSelected[depth] = true;
-		generateSubset(depth+1);
-		// false는 B구역에 넣겠다는 뜻
-		isSelected[depth] = false;
-		generateSubset(depth+1);
-		
-	}
-	
-	static boolean check(ArrayList<Integer> area) {
-		Queue<Integer> q = new LinkedList<>();
-		boolean[] visited = new boolean[N+1];
-        visited[area.get(0)] = true;
-        q.add(area.get(0));
-		
-		int count = 1;
-		
-		while(!q.isEmpty()) {
-			int cur = q.poll();
-			 
-			//선거구에 해당하고, 아직 미방문
-			for(int next : graph[cur]) {
-				if(area.contains(next) && !visited[next]) {
-					visited[next] = true;
-					q.add(next); //이거 넣는거 깜빡함;;;
-					count++;
-				}
-			
-			}
+    public static void main(String[] args) throws IOException {
+        br = new BufferedReader(new InputStreamReader(System.in));
 
-		}
-		return count == area.size();
-	}
-	
-	//두 구역의 차이를 검사하는 함수
-	static void calc(ArrayList<Integer> areaA, ArrayList<Integer> areaB) {
-		int A = 0;
-		int B = 0;
-		
-		// ArrayList에 N개 만큼 없는데 N번 만큼 돌아보게해서 틀림...
-//		for(int i = 1; i <= N; i++) {
-		for(int i : areaA) {
-			A += population[i];
-		}
-		
-		for(int i : areaB) {
-			B += population[i];
-		}
-		
-		diffCnt = Math.min(diffCnt, Math.abs(A-B));
-	}
+        //1. 인풋값 받기(N, population[N], 인접 정보)
+        N = Integer.parseInt(br.readLine());
+
+        population = new int[N];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            population[i] = Integer.parseInt(st.nextToken());
+        }
+
+        //2. 인접리스트 연결하기
+        adj = new ArrayList[N];
+        for (int i = 0; i < N; i++) {
+            adj[i] = new ArrayList<>();
+        }
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            int nums = Integer.parseInt(st.nextToken());
+            for (int j = 0; j < nums; j++) {
+                int num = Integer.parseInt(st.nextToken())-1;
+                adj[i].add(num);
+                adj[num].add(i);
+            }
+        }
+
+        //3. 부분집합으로 두 집합으로 나눠보기
+        seleted = new boolean[N];
+        subSet(0);
+
+        //min이 그대로 max라면 두 선거구를 나눌 수 있는 방법이 없을때
+        if(min == Integer.MAX_VALUE){
+            System.out.println("-1");
+        }else{
+            System.out.println(min);
+        }
+
+    }
+    static void subSet(int cnt){
+        if(cnt == N){
+            //두 집합이 모두 연결되어 있는지 확인후 차이값 비교
+            if(isConnected(true) && isConnected(false)){
+                //최솟값 찾기
+                minDiff();
+            }
+            return;
+        }
+
+        //selected값이 true인 경우 첫번째 집합, false인 경우 두번째 집합
+        //첫번째 집합에 들어가는 경우
+        seleted[cnt] = true;
+        subSet(cnt + 1);
+        //두번째 집합에 들어가는 경우
+        seleted[cnt] = false;
+        subSet(cnt + 1);
+    }
+    static boolean isConnected(boolean flag){
+        //해당 요소 첫번재꺼 찾고
+        //같은 flag인 애들이 다 연결되어 있는지 찾기
+        int start = -1;
+        for (int i = 0; i < N; i++) {
+            if(seleted[i] == flag){
+                start = i;
+                break;
+            }
+        }
+
+        //공집합인 경우, 즉 start가 -1 그대로
+        if(start == -1){
+            return false;
+        }
+
+        visited = new boolean[N];
+        //연결되어 있는지 확인하기 위해 DFS사용
+        DFS(start, flag);
+
+        //방문이 안된애들이 있는지 체크
+        for (int i = 0; i < N; i++) {
+            if(seleted[i] == flag && !visited[i]) return false;
+        }
+
+        //다 갈 수 있는 경우
+        return true;
+    }
+    static void DFS(int node, boolean flag){
+        //방문하는지 체크하기
+        visited[node] = true;
+        for (int num :
+                adj[node]) {
+            //같은 집합이고, 방문하지 않았다면 DFS
+            if(seleted[num] == flag && !visited[num]){
+                DFS(num, flag);
+            }
+        }
+    }
+    static void minDiff(){
+        int pA = 0;
+        int pB = 0;
+
+        for (int i = 0; i < N; i++) {
+            if(seleted[i]){
+                pA += population[i];
+            }else{
+                pB += population[i];
+            }
+        }
+
+        min = Math.min(min, Math.abs(pA - pB));
+    }
 }
-
-
-
-
-
-
-
-
