@@ -3,36 +3,46 @@ import java.util.*;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		Scanner sc = new Scanner(System.in);
-
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
+		
+		
 		double result = 0;
-        double total = 0; 
-		char c;
-				
-		for(int i=0;i<20;i++) {
-			double credit = 0; 
+		double credit_sum  = 0;
+		
+		for(int i = 0; i < 20; i++) {
 			double grade = 0;
 			
-			String str_arr[] = sc.nextLine().split(" ");
-			credit += Double.parseDouble(str_arr[1]);
-			c = str_arr[2].charAt(0);
-			
-			switch(c) {
-			case 'A':
-				if(str_arr[2].charAt(1) == '+') grade += 4.5;
-				else grade += 4.0;
+			st = new StringTokenizer(br.readLine());
+			String temp = st.nextToken();
+			double credit  = Double.parseDouble(st.nextToken());
+			String alpha = st.nextToken();
+
+			switch(alpha.charAt(0)) {
+			case 'A' :
+				if(alpha.charAt(1) == '+')
+					grade += 4.5;
+				else
+					grade += 4.0;
 				break;
-			case 'B':
-				if(str_arr[2].charAt(1) == '+') grade += 3.5;
-				else grade += 3.0;
+			case 'B' :
+				if(alpha.charAt(1) == '+')
+					grade += 3.5;
+				else 
+					grade += 3.0;
 				break;
-			case 'C':
-				if(str_arr[2].charAt(1) == '+') grade += 2.5;
-				else grade += 2.0;
+			case 'C' :
+				if(alpha.charAt(1) == '+')
+					grade += 2.5;
+				else 
+					grade += 2.0;
 				break;
-			case 'D':
-				if(str_arr[2].charAt(1) == '+') grade += 1.5;
-				else grade += 1.0;
+			case 'D' :
+				if(alpha.charAt(1) == '+')
+					grade += 1.5;
+				else 
+					grade += 1.0;
 				break;
 			case 'F':
 				grade += 0;
@@ -42,10 +52,14 @@ public class Main {
 				credit = 0;
 				break;
 			}
-			total += credit;
+			credit_sum  += credit;
 			result += credit*grade;
+//			System.out.println(total + " "  + result);
 		}
-
-		System.out.println(result / total);
+//		System.out.println(result  + " " + credit_sum );
+		System.out.println(result / credit_sum );
+		bw.flush();
+		bw.close();
+		br.close();
 	}
 }
