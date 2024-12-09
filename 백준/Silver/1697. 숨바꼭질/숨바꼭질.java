@@ -1,56 +1,64 @@
 //BOJ1697 숨바꼭질, 실버1
+//1차원 배열을 활용한 BFS
 import java.io.*;
 import java.util.*;
 
-public class Main {
-	static int N, K, time;
-	static int[] point, parent;
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		N = Integer.parseInt(st.nextToken());
-		K = Integer.parseInt(st.nextToken());
-		time = 0;
-		point = new int[100001];
-		parent = new int[100001];
-		
-		time = bfs();
+public class Main
+{
+	static int N;
+	static int K;
 	
-		bw.write(time + "\n");
-		bw.flush();
-		bw.close();
-		br.close();
-	}
-	static int bfs() {
-		if(N == K) return 0;
-		Queue<Integer> q = new LinkedList<>();
-		q.add(N);
-		point[N] = 1; //구분을 위해 해둠
+	static int visited[] = new int[100001];
+	
+	// X-1, X+1
+	// 2*X
+	public static void main(String[] args) throws IOException
+	{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		while(!q.isEmpty()) {
-			int cur = q.poll();
-			int next;
+		String input = br.readLine();
+		String[] inputs = input.split(" ");
+		
+		N = Integer.valueOf(inputs[0]);
+		K = Integer.valueOf(inputs[1]);
+		
+		int result = bfs(N);
+		System.out.println(result);
+	}
+
+	private static int  bfs(int node)
+	{
+		Queue<Integer> queue = new LinkedList<Integer>();
+		
+		queue.add(node);
+		int index = node;
+		int n = 0;
+		visited[index] = 1;
+		while (queue.isEmpty() == false)
+		{
+			n = queue.remove();
 			
-			for(int i = 0; i < 3; i++) {
-				if(i == 0) next = cur - 1;
-				else if(i == 1) next = cur + 1;
-				else next = cur * 2;
-				
-				if(next < 0 || next > 100000) continue;
-				if(next == K) {
-					return point[cur];
-				}else if(point[next] != 0) { //방문한적있을때
-					continue;
-				}else if(point[next] == 0) {
-					point[next] = point[cur] + 1;
-					q.add(next);
-				}
+			if (n == K)
+			{
+				return visited[n]-1;
 			}
 			
+			if (n-1>=0 && visited[n-1] == 0)
+			{
+				visited[n-1] = visited[n]+1;
+				queue.add(n-1);
+			}
+			if (n+1 <= 100000 && visited[n+1] == 0)
+			{
+				visited[n+1] = visited[n]+1;
+				queue.add(n+1);
+			}
+			if (2*n <= 100000 && visited[2*n] == 0)
+			{
+				visited[2*n] = visited[n] + 1;
+				queue.add(2*n);
+			}
 		}
-		
 		return -1;
 	}
 }
