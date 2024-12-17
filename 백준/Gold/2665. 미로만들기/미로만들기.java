@@ -1,5 +1,6 @@
 //BOJ2665 미로만들기, 골4
 //다익스트라 알고리즘
+//메모리초과로 애먹음
 import java.io.*;
 import java.util.*;
 
@@ -26,14 +27,14 @@ public class Main {
 			}
 		}
 		
-//		for(int i = 0; i < N; i++) {
-//			for(int j = 0; j < N; j++) {
-//				System.out.print(bang[i][j]);
-//			}
-//			System.out.println();
-//		}
-		
 		dijkstra();
+		
+//		for(int i = 0; i < N; i++) {
+//		for(int j = 0; j < N; j++) {
+//			System.out.print(score[i][j]);
+//		}
+//		System.out.println();
+//	}
 		
 		bw.write(score[N-1][N-1] + "\n");
 		bw.flush();
@@ -41,7 +42,7 @@ public class Main {
 		br.close();
 	}
 	static void dijkstra() {
-		PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[2] - b[2]);
+		Queue<int[]> pq = new LinkedList<>();
 		pq.add(new int[] {0,0,0}); //x, y, cost
 		score[0][0] = 0; // 초기값 설정
 		
@@ -52,7 +53,7 @@ public class Main {
 			int cost = cur[2];
 //			System.out.println(x + " " + y);
 			
-			if(score[x][y] < cost) continue; //메모리 초과를 피하기 위해 시도
+//			if(score[x][y] < cost) continue; //메모리 초과를 피하기 위해 시도
 			
 			for(int dic = 0; dic < 4; dic++) {
 				int nx = x + dx[dic];
@@ -60,13 +61,22 @@ public class Main {
 				
 				if(nx < 0 || ny < 0 || nx >= N || ny >= N) continue;
 				
-				int newCost = cost + (bang[nx][ny] == 1 ? 0 : 1);
+
+				//다음 score와 비교하기 위해서는 미리 다음 방이 0인지 1인지 구분하고 다음 cost를 업데이트하고 
+				//비교해줘야 한다.
+//				int newCost = cost + (bang[nx][ny] == 1 ? 0 : 1);
+				int newCost = 0;
+				if(bang[nx][ny] == 1)
+					newCost = cost;
+				else 
+					newCost = cost + 1;  
+				
 				if(newCost < score[nx][ny]) {
 					score[nx][ny] = newCost;
 					pq.add(new int[] {nx, ny, newCost});
 				}
 				
-				
+				//이렇게 하면 메모리 초과 발생
 //				if(score[nx][ny] > cost) {
 //					if(bang[nx][ny] == 1) {
 //						pq.add(new int[] {nx, ny, cost});
