@@ -1,4 +1,5 @@
 //BOJ2211 네트워크 복구
+//다익스트라 알고리즘
 import java.io.*;
 import java.util.*;
 
@@ -50,9 +51,8 @@ public class Main {
 //			best[i].from = i;
 //			best[i].to = i;
 //			best[i].cost = 987654321;
-			best[i] = new Temp(i, i, 987654321);
+			best[i] = new Temp(i, i, 987654321); //이렇게 초기화 해줘야한다.
 		}
-		
 		
 		
 		for(int i = 0; i < M; i++) {
@@ -66,6 +66,7 @@ public class Main {
 		}
 		
 		dijkstra();
+		
 		bw.write(N-1 + "\n");
 		for(int i = 2; i <= N; i++)	{
 			bw.write(best[i].from + " " + best[i].to + "\n");
