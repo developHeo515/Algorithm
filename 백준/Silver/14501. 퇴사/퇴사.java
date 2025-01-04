@@ -13,17 +13,17 @@ public class Main {
 		StringTokenizer st;
 
 		N = Integer.parseInt(br.readLine());
-		T = new int[N];
-		P = new int[N];
+		T = new int[N+1];
+		P = new int[N+1];
 		
-		for(int i = 0; i < N; i++) {
+		for(int i = 1; i <= N; i++) {
 			st = new StringTokenizer(br.readLine());
 			T[i] = Integer.parseInt(st.nextToken());
 			P[i] = Integer.parseInt(st.nextToken());
 		}
 		
 		res = 0;
-		dfs(0, 0);
+		dfs(1, 0);
 		
 		bw.write(res+"\n");
 		bw.flush();
@@ -31,17 +31,17 @@ public class Main {
 		br.close();		
 	}
 	static void dfs(int day, int sum) {
-		if(day == N) {
+		if(day == N+1) {
 			res = Math.max(res, sum);
 			return;
 		}
 		
 		//상담 하는 경우
-		if(day + T[day] <= N) {
+		if(day + T[day] <= N+1) {
 			dfs(day + T[day], sum + P[day]);
 		}
 		//상담 안하는 경우
-		if(day+1 <= N) {
+		if(day+1 <= N+1) {
 			dfs(day + 1, sum);
 		}
 		
