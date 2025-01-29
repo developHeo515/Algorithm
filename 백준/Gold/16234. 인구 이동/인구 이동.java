@@ -126,7 +126,8 @@ public class Main {
 			board[p.x][p.y] = sum / move.size();
 		}
 		
-		move.removeAll(move);
+//		move.removeAll(move);
+		move = new ArrayList<>();
 		
 	}
 }
