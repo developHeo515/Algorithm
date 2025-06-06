@@ -5,9 +5,8 @@ class Solution {
     static int[] dx = {0, 1, 0, -1}; 
     static int[] dy = {1, 0, -1, 0};
     static int[][] board;
-    static int answer = 0;
     public int solution(int[][] maps) {
-
+        int answer = 0;
         int n = maps.length;
         int m = maps[0].length;
 
