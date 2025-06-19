@@ -5,19 +5,12 @@ class Solution {
         int[] answer = {};
 
         List<Integer> ans = new ArrayList<>();
-        List<Integer> del = new ArrayList<>();
 
         for(int i = 0; i < arr.length; i++){
             ans.add(arr[i]);
         }
-        for(int i = 0; i < delete_list.length; i++){
-            del.add(delete_list[i]);
-        }
-
-        for(int d : del){
-            if(ans.contains(d)){
-                ans.remove(Integer.valueOf(d));
-            }
+        for(int d : delete_list){
+            ans.remove((Integer)d);
         }
 
         answer = ans.stream().mapToInt(Integer::intValue).toArray();
