@@ -3,27 +3,29 @@ import java.util.*;
 class Solution {
     public int[] solution(int[] arr) {
         int[] stk = {};
-        List<Integer> list = new ArrayList<>();
+        Deque<Integer> deque = new ArrayDeque<>();
+
 
         int i = 0;
 
         while(i < arr.length){
-            if(list.size() == 0){
-                list.add(arr[i]);
+            if(deque.isEmpty()){
+                deque.add(arr[i]);
                 i++;
             }else {
-                if(arr[i] > list.get(list.size() - 1)){
-                    list.add(arr[i]);
+                if(arr[i] > deque.peekLast()){
+                    deque.addLast(arr[i]);
                     i++;
                 }else {
-                    list.remove(list.size() - 1);
+                    deque.removeLast();
                 }
             }
         }
 
-        stk = new int[list.size()];
-        for(int idx = 0; idx < list.size(); idx++){
-            stk[idx] = list.get(idx);
+        stk = new int[deque.size()];
+        int idx = 0;
+        for(int num : deque){
+            stk[idx++] = num;
         }
 //        System.out.println(Arrays.toString(stk));
 
