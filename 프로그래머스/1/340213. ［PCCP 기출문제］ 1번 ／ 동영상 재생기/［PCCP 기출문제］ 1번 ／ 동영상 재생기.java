@@ -1,6 +1,4 @@
 class Solution {
-    static int MM;
-    static int SS;
     public String solution(String video_len, String pos, String op_start, String op_end, String[] commands) {
         String answer = "";
 
@@ -28,7 +26,7 @@ class Solution {
                     p = 0;
                 }
             }
-            
+
             if(opStart <= p && p <= opEnd){
                 p = opEnd;
             }
