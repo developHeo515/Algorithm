@@ -1,30 +1,23 @@
-import java.util.Arrays;
+import java.util.HashMap;
+
 class Solution {
     public int[] solution(String s) {
         int[] answer = {};
         answer = new int[s.length()];
+        HashMap<Character, Integer> hm = new HashMap<>();
 
         for(int i = 0; i < s.length(); i++){
-            if(i == 0){
+            if(!hm.containsKey(s.charAt(i))){
                 answer[i] = -1;
+                hm.put(s.charAt(i), i);
             }
-            int cnt = 1;
-            boolean flag = true;
-            for(int j = i; j > 0; j--){
-                if(s.charAt(i) == s.charAt(j-1)){
-                    answer[i] = cnt;
-                    flag = false;
-                    break;
-                }
-                cnt++;
-            }
-            if(flag) {
-                answer[i] = -1;
+            else{
+                answer[i] = i - hm.get(s.charAt(i));
+                hm.put(s.charAt(i), i);
             }
         }
-
-
-        System.out.println(Arrays.toString(answer));
+        
+//        System.out.println(Arrays.toString(answer));
         return answer;
     }
 }
