@@ -8,7 +8,7 @@ public class Main {
         StringTokenizer st;
 
         int N = Integer.parseInt(br.readLine());
-        int[] arr = new int[N];
+        long[] arr = new long[N];
 
         for(int i = 0; i < N; i++){
             st = new StringTokenizer(br.readLine());
@@ -32,7 +32,7 @@ public class Main {
             }
         }
 
-        int res = 0;
+        long res = 0;
         for(int i = 0; i < N; i++){
            res += arr[i];
         }
