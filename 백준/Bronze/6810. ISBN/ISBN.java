@@ -1,0 +1,25 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        int[] arr = {1, 3};
+        int[] code = {9,7,8,0,9,2,1,4,1,8,0,0,0};
+
+        for(int i = 0; i < 3; i++){
+            code[i+10] = Integer.parseInt(br.readLine());
+        }
+        int sum = 0;
+        for(int i = 0; i < code.length; i++){
+            sum += code[i] * arr[i%2];
+        }
+        System.out.println("The 1-3-sum is " + sum);
+
+        bw.flush();
+        br.close();
+        bw.close();
+    }
+} 
