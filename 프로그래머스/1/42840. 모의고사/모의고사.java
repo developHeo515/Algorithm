@@ -1,49 +1,31 @@
 import java.util.*;
+
 class Solution {
     public int[] solution(int[] answers) {
         int[] answer = {};
-        int[] math1 = {1,2,3,4,5};
-        int[] math2 = {2,1,2,3,2,4,2,5};
-        int[] math3 = {3,3,1,1,2,2,4,4,5,5};
-        int[] student = new int[3];
+        List<Integer> list = new LinkedList<>();
 
-        int cnt;
-
-        cnt = 0;
-        for(int i = 0; i < answers.length; i++){
-            if(answers[i] == math1[i % math1.length]){
-                cnt++;
-            }
-        }
-        student[0] = cnt;
-
-        cnt = 0;
-        for(int i = 0; i < answers.length; i++){
-            if(answers[i] == math2[i % math2.length]){
-                cnt++;
-            }
-        }
-        student[1] = cnt;
-
-        cnt = 0;
-        for(int i = 0; i < answers.length; i++){
-            if(answers[i] == math3[i % math3.length]){
-                cnt++;
-            }
-        }
-        student[2] = cnt;
-
-//        System.out.println(Arrays.toString(student));
+        int[] A = {1, 2, 3, 4, 5};
+        int[] B = {2, 1, 2, 3, 2, 4, 2, 5};
+        int[] C = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
         int max = 0;
-        for(int i = 0; i < student.length; i++){
-            if(max < student[i]){
-                max = student[i];
+        int[] cnt = new int[3];
+
+        for(int i = 0; i < answers.length; i++){
+            if(answers[i] == A[i % A.length]){
+                cnt[0]++;
+            }
+            if(answers[i] == B[i % B.length]){
+                cnt[1]++;
+            }
+            if(answers[i] == C[i % C.length]){
+                 cnt[2]++;
             }
         }
+        max = Math.max(Math.max(cnt[0], cnt[1]), cnt[2]);
 
-        List<Integer> list = new ArrayList<>();
-        for(int i = 0; i < student.length; i++){
-            if(max == student[i]){
+        for(int i = 0; i < cnt.length; i++){
+            if(cnt[i] == max){
                 list.add(i+1);
             }
         }
@@ -53,7 +35,6 @@ class Solution {
             answer[i] = list.get(i);
         }
 
-//        System.out.println(Arrays.toString(answer));
         return answer;
     }
 }
