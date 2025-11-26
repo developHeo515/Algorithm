@@ -10,20 +10,29 @@ public class Main {
         int n = Integer.parseInt(br.readLine());
 
         for(int tc = 0; tc < n; tc++){
-            Deque<String> stack = new ArrayDeque<>();
-            String answer = "";
+            Deque<Character> stack = new ArrayDeque<>();
             st = new StringTokenizer(br.readLine());
 
             while(st.hasMoreTokens()){
                 String str = st.nextToken();
-                for(int i = str.length() - 1; i >= 0; i--){
-                    answer += str.charAt(i);
+
+                //스택방식(굳이 안써도될듯)
+                for(int i = 0; i < str.length(); i++){
+                    stack.push(str.charAt(i));
                 }
-                answer += " ";
+                while(!stack.isEmpty()){
+                    bw.write(stack.pop());
+                }
+                //기존 방식
+//                for(int i = str.length() - 1; i >= 0; i--){
+//                    answer += str.charAt(i);
+//                }
+                bw.write(" ");
             }
 
-            bw.write(answer + "\n");
+            bw.write("\n");
         }
+
 
         bw.flush();
         bw.close();
