@@ -11,54 +11,27 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        max = 0;
         int[] arr = new int[N];
-        boolean[] visit = new boolean[N];
+        int max = 0;
 
         st = new StringTokenizer(br.readLine());
         for(int i = 0; i < N; i++){
             arr[i] = Integer.parseInt(st.nextToken());
         }
-//        System.out.print(Arrays.toString(arr));
-
-        dfs(0, arr, visit);
+        for(int i = 0; i < N - 2; i++){
+            for(int j = i+1; j < N - 1; j++){
+                for(int k = j+1; k < N; k++){
+                    if(arr[i] + arr[j] + arr[k] <= M){
+                        max = Math.max(max, arr[i] + arr[j] + arr[k]);
+                    }
+                }
+            }
+        }
 
         bw.write(max + "\n");
 
         bw.flush();
         bw.close();
         br.close();
-    }
-
-    static void dfs(int cnt, int[] arr, boolean[] visit){
-        if(cnt == 3){
-//            System.out.println(Arrays.toString(visit));
-            int num = 0;
-            for(int i = 0; i < N; i++){
-                if(visit[i]){
-                    if(M < num + arr[i]){
-                        return;
-                    }
-                    num += arr[i];
-                }
-            }
-            if(max <= num){
-                max = num;
-//                System.out.println("내가 최근줄 " + " " + Arrays.toString(visit));
-            }
-            return;
-        }
-
-//        System.out.println(cnt);
-
-        for(int i = 0; i < N; i++){
-            if(!visit[i]){
-                visit[i] = true;
-                dfs(cnt+1, arr, visit);
-                visit[i] = false;
-            }
-        }
-
-
     }
 }
