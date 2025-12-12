@@ -1,46 +1,41 @@
-import java.io.*;
 import java.util.*;
 
 class Solution {
-    public class feature {
-        int priority;
+    static class feature {
         int loc;
-
-        public feature(int priority, int loc) {
-            this.priority = priority;
+        int priority;
+        public feature(int loc, int priority){
             this.loc = loc;
+            this.priority = priority;
         }
     }
-
     public int solution(int[] priorities, int location) {
         int answer = 0;
-        Queue<feature> q = new LinkedList<>();
-        List<Integer> pList = new ArrayList<>();
+        Deque<feature> q = new ArrayDeque<>();
+        Integer[] arr = new Integer[priorities.length];
 
-        for(int p : priorities) {
-            pList.add(p);
+        for(int i = 0; i < priorities.length; i++){
+            q.add(new feature(i, priorities[i]));
+            arr[i] = priorities[i];
         }
 
-        pList.sort(Collections.reverseOrder());
+        //int배열을 내림차순하는 방법
+        Arrays.sort(arr, Collections.reverseOrder());
 
-        for(int i = 0; i < priorities.length; i++) {
-            if(i != location) {
-                q.add(new feature(priorities[i], -1));
-            }
-            else {
-                q.add(new feature(priorities[i], location));
-            }
-        }
-
-        while(!q.isEmpty()) {
+        int idx = 0;
+        int sequence = 0;
+        while(!q.isEmpty()){
             feature cur = q.poll();
 
-            if(cur.priority == pList.get(0)) {
-                answer++;
-
-                if(cur.loc == location)
+            //우선순위가 제일 높을때
+            if(cur.priority == arr[idx]){
+                //실행(출력)순서
+                sequence++;
+                idx++;
+                if(cur.loc == location){
+                    answer = sequence;
                     break;
-                pList.remove(0);
+                }
             }
             else {
                 q.add(cur);
