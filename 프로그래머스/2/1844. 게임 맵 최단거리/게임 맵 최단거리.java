@@ -1,49 +1,46 @@
-import java.io.*;
 import java.util.*;
 
 class Solution {
-    static int[] dx = {0, 1, 0, -1}; 
+    static int[] dx = {0, 1, 0, -1}; //우, 하, 좌, 상
     static int[] dy = {1, 0, -1, 0};
-    static int[][] board;
     public int solution(int[][] maps) {
         int answer = 0;
         int n = maps.length;
         int m = maps[0].length;
 
-        board = new int[n][m];
+        boolean[][] visit = new boolean[n][m];
+        Deque<int[]> q = new ArrayDeque<>();
+        q.add(new int[] {0, 0, 1});
+        visit[0][0] = true;
 
-        answer = bfs(maps, n, m);
-
-        return answer;
-    }
-
-    static int bfs(int[][] maps , int n, int m) {
-        Queue<int[]> q = new LinkedList<>();
-        q.add(new int[] {0, 0});
-        board[0][0] = 1;
-
-        while(!q.isEmpty()) {
+        while(!q.isEmpty()){
             int[] cur = q.poll();
-            int x = cur[0];
-            int y = cur[1];
+            int cx = cur[0];
+            int cy = cur[1];
+            int cnt = cur[2];
 
-            for(int dir = 0; dir < 4; dir++) {
-                int nx = x + dx[dir];
-                int ny = y + dy[dir];
+            if(cx == n-1 && cy == m-1){
+//                System.out.println(cx + " - " + cy);
+                answer = cnt;
+                break;
+            }
 
+            for(int dir = 0; dir < 4; dir++){
+                int nx = cx + dx[dir];
+                int ny = cy + dy[dir];
                 if(nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
-                if(maps[nx][ny] == 0) continue;
-                if(board[nx][ny] == 0) {
-                    board[nx][ny] = board[x][y] + 1;
-                    q.add(new int[] {nx, ny});
-                    if(nx == n-1 && ny == m-1) {
-                        return board[nx][ny];
-                    }
+                if(visit[nx][ny]) continue;
+                if(maps[nx][ny] == 1){
+                    visit[nx][ny] = true;
+                    q.add(new int[] {nx, ny, cnt+1});
                 }
             }
+
         }
 
-        return -1;
+        if(answer == 0){
+            answer = -1;
+        }
+        return answer;
     }
-
 }
