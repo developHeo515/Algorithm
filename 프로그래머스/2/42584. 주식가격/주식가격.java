@@ -1,28 +1,18 @@
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 
 class Solution {
     public int[] solution(int[] prices) {
-        int[] answer = {};
-        answer = new int[prices.length];
-        Deque<Integer> stack = new ArrayDeque<>();
+        int len = prices.length;
+        int[] answer = new int[len];
 
         for(int i = 0; i < prices.length; i++){
-            // [디버깅] 가격이 떨어졌을때 prices[i]가 뒤에 시간이다.
-//            if(!stack.isEmpty()){
-//                System.out.println(prices[stack.peek()] + " == " + stack.peek() + " == " + prices[i]);
-//            }
-            while(!stack.isEmpty() && prices[stack.peek()] > prices[i]){
-                answer[stack.peek()] = i - stack.peek();
-                stack.pop();
+            int stock = prices[i];
+            for(int j = i+1; j < prices.length; j++){
+                answer[i]++;
+                if(stock > prices[j]) break;
             }
-
-            stack.push(i);
-        }
-
-        while(!stack.isEmpty()){
-            answer[stack.peek()] = prices.length - stack.peek() - 1;
-            stack.pop();
+//            System.out.print(cnt + " ");
         }
 
         return answer;
