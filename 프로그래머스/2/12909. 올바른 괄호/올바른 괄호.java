@@ -1,5 +1,4 @@
 import java.util.ArrayDeque;
-
 class Solution {
     boolean solution(String s) {
         boolean answer = true;
