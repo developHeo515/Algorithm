@@ -1,37 +1,36 @@
 class Solution {
     public int solution(int n) {
         int answer = 0;
-
-        String nBinary = "";
+        String aStr = "";
         int num = n;
         int aCnt = 0;
 
-        nBinary = Integer.toBinaryString(num);
-
-//        System.out.println(nBinary);
-        for(int i = 0; i < nBinary.length(); i++){
-            if(nBinary.charAt(i) == '1') aCnt++;
+        aStr = Integer.toBinaryString(num);
+//        System.out.println(sb);
+        for(int i = 0; i < aStr.length(); i++){
+            if(aStr.charAt(i) == '1') aCnt++;
         }
 
         //다음 큰 숫자 찾기
+        int count = 0;
         while(true){
-            String nextBinary = "";
+            count++;
+            String bStr = "";
             int bCnt = 0;
-            num++;
-//            System.out.println(num);
+            num = n + count;
+//            System.out.println(n + " = " + count + " = " + num);
+            bStr = Integer.toBinaryString(num);
 
-            nextBinary = Integer.toBinaryString(num);
-
-            for(int i = 0; i < nextBinary.length(); i++){
-                if(nextBinary.charAt(i) == '1') bCnt++;
+            for(int i = 0; i < bStr.length(); i++){
+                if(bStr.charAt(i) == '1') bCnt++;
             }
 
             if(aCnt == bCnt) {
-                answer = num;
+                answer = n + count;
                 break;
             }
         }
-        
+
         return answer;
     }
 }
