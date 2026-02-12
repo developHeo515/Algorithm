@@ -1,50 +1,39 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int K;
-    static int[] numbers;
-    static int[] select;
-    static StringBuilder sb;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
-        while (true) {
+        while(true){
             st = new StringTokenizer(br.readLine());
-            K = Integer.parseInt(st.nextToken());
+            int k = Integer.parseInt(st.nextToken());
+            if(k == 0) break;
 
-            if (K == 0) break;
-
-            sb = new StringBuilder();
-            numbers = new int[K];
-            for (int i = 0; i < K; i++) {
-                numbers[i] = Integer.parseInt(st.nextToken());
+            int[] arr = new int[k];
+            for(int i = 0; i < k; i++){
+                arr[i] = Integer.parseInt(st.nextToken());
             }
-            select = new int[6];
 
-            // kC6 구하기
-            combination(0, 0);
-            System.out.println(sb);
+            dfs(0, 0, new ArrayList<>(), arr);
+            System.out.println();
         }
+        br.close();
     }
-
-    static void combination(int start, int depth) {
-        // Base Case
-        if (depth == 6) {
-            for (int i : select) {
-                sb.append(i).append(" ");
+    static void dfs(int depth, int start, List<Integer> list, int[] arr){
+        if(depth == 6){
+            for(int n : list){
+                System.out.print(n + " ");
             }
-            sb.append("\n");
+            System.out.println();
             return;
         }
 
-        for (int i = start; i < K; i++) {
-            select[depth] = numbers[i];
-            combination(i + 1, depth + 1);
+        for(int i = start; i < arr.length; i++){
+            list.add(arr[i]);
+            dfs(depth + 1, i + 1, list, arr);
+            list.remove(list.size() - 1);
         }
     }
 }
