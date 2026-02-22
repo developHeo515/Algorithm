@@ -1,17 +1,13 @@
 import java.io.*;
 import java.math.BigInteger;
-import java.util.*;
 
 public class Main {
-    static int cnt = 0;
     static BufferedWriter bw;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st;
 
         int N = Integer.parseInt(br.readLine());
-
         System.out.println(BigInteger.TWO.pow(N).subtract(BigInteger.ONE));
 
         if(N <= 20){
@@ -29,7 +25,7 @@ public class Main {
         }
 
         hanoi(N-1, A, C, B);
-        bw.write(A + " " + C + "\n");
+        hanoi(1, A, B, C);
         hanoi(N-1, B, A, C);
     }
 }
