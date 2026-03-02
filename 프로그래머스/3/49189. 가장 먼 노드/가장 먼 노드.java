@@ -1,54 +1,54 @@
 import java.util.*;
+
 class Solution {
-    static ArrayList<Integer>[] graph;
-    static boolean[] visit;
-//    static int[] dist;
-    static int res;
     public int solution(int n, int[][] edge) {
         int answer = 0;
-        graph = new ArrayList[n+1];
-        for(int i = 1; i <= n; i++){
-            graph[i] = new ArrayList<>();
+        List<List<Integer>> list = new ArrayList<>();
+        for(int i = 0; i <= n; i++){
+            list.add(new ArrayList<>());
         }
-        visit = new boolean[n+1];
-//        dist = new int[n+1];
-        res = 0;
 
         for(int[] e : edge){
-            int from = e[0];
-            int to = e[1];
-            graph[from].add(to);
-            graph[to].add(from);
+            // 양방향
+            list.get(e[0]).add(e[1]);
+            list.get(e[1]).add(e[0]);
         }
-//        System.out.println(Arrays.toString(graph));
 
-        bfs(1);
-        answer = res;
+        int[] dist = new int[n+1];
+//        System.out.println(list);
+        bfs(new boolean[n+1], list, dist);
+
+        int max = 0;
+        for(int i = 1; i < dist.length; i++){
+            max = Math.max(max, dist[i]);
+        }
+
+        for(int i = 1; i < dist.length; i++){
+            if(max == dist[i]){
+                answer++;
+            }
+        }
+
         return answer;
     }
-
-    static void bfs(int v){
-        Queue<Integer> q = new LinkedList<>();
-        q.add(v);
-        visit[v] = true;
-//        dist[v] = 1;
+    static void bfs(boolean[] visit, List<List<Integer>> list, int[] dist){
+        Queue<int[]> q = new ArrayDeque<>();
+        q.offer(new int[] {1, 0});
+        visit[1] = true;
+        dist[1] = 0;
 
         while(!q.isEmpty()){
-            int qsize = q.size();
-            res = qsize;
-            // System.out.println("그래프 탐색 : "+ " " +res);
+            int[] c = q.poll();
+            int cur = c[0];
+            int distance = c[1];
 
-            while(qsize != 0){
-                qsize--;
-                int cur = q.poll();
-
-                for(int next : graph[cur]){
-                    if(visit[next]) continue;
+            for(int next : list.get(cur)){
+                if(!visit[next]){
                     visit[next] = true;
-                    q.add(next);
+                    dist[next] = distance + 1;
+                    q.offer(new int[] {next, distance + 1});
                 }
             }
-
         }
     }
 }
