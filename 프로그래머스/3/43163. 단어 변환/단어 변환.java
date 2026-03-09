@@ -1,45 +1,57 @@
+import java.util.*;
 class Solution {
-    static int res = 987654321;
+    static int cnt;
+    static boolean flag;
     public int solution(String begin, String target, String[] words) {
         int answer = 0;
 
-        boolean[] visit = new boolean[words.length];
+        cnt = 0;
+        flag = false;
+        bfs(begin, target, words, new HashSet<>());
 
-        dfs(0, begin, target, words, visit);
-        answer = res;
-        if(answer == 987654321){
-            answer = 0;
-        }
-        return answer;
+        // 단어 변형에 실패했을때
+        if(!flag) cnt = 0;
+
+        return answer = cnt;
     }
+    static void bfs(String begin, String target, String[] words, HashSet<String> hs){
+        Queue<String> q = new ArrayDeque<>();
+        hs.add(begin);
+        q.offer(begin);
 
-    static void dfs(int cnt, String begin, String target, String[] words, boolean[] visit){
-//        System.out.println("dfs 시작 : " + begin);
-         if(begin.equals(target)){
-             if(res > cnt){
-                 res = cnt;
-//                 System.out.println("최소로 찾음 : " + res);
-             }
+        while(!q.isEmpty()) {
+            int qsize = q.size();
+            while(qsize-- != 0){
+                String cur = q.poll();
 
-            return;
-        }
+                // 같은 단어 발견했을 때
+                if(cur.equals(target)) {
+                    flag = true;
+                    break;
+                }
 
-        for(int i = 0; i < words.length; i++){
-            if(!visit[i]){
-                //변환가능한지 검사
-                int diff = 0;
-                for(int k = 0; k < words[i].length(); k++){
-                    if(begin.charAt(k) != words[i].charAt(k)){
-                        diff++;
+                for(String next : words){
+                    if(hs.contains(next)) continue;
+                    if(check(cur, next)){
+                        hs.add(next);
+                        q.offer(next);
                     }
                 }
-                if(diff == 1){
-                    visit[i] = true;
-                    dfs(cnt+1, words[i], target, words, visit);
-                    visit[i] = false;
-                }
             }
+            if(flag) break;
+            cnt++;
         }
-        return;
+    }
+
+    static boolean check(String cur, String next){
+        int number = 0;
+        for(int i = 0; i < cur.length(); i++){
+            char a = cur.charAt(i);
+            char b = next.charAt(i);
+            if(a != b) number++;
+        }
+
+        if(number == 1) return true;
+        else return false;
     }
 }
