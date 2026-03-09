@@ -2,51 +2,55 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int N, M;
-	static ArrayList<Integer>[] arr;
-	static int num = 0;
-	static boolean visited[];
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		arr = new ArrayList[N+1];
-		visited = new boolean[N+1];
-		for(int i = 1; i < N+1; i++) {
-			arr[i] = new ArrayList<>();
-		}
-		
-		for(int i = 0; i < M; i++) {
-			st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			arr[a].add(b);
-			arr[b].add(a);
-		}
-//		System.out.println(Arrays.deepToString(arr));
-		for(int i = 1; i <= N; i++) {
-			if(!visited[i]) {
-				dfs(i);
-				num++;
-			}
-		}
-//		System.out.println(Arrays.toString(visited));
-		System.out.println(num);
-	}
-	static void dfs(int idx) {
-		if(visited[idx]) return;
-		visited[idx] = true;
-//		System.out.println(idx);
-		
-		for(int cur : arr[idx]) {
-			if(!visited[cur]) {
-//				System.out.println(cur+"에서 dfs 드감");
-				dfs(cur);
-//				System.out.println(cur+"에서 나옴");
-			}
-		}
-		
-	}
+    static int N;
+    static int M;
+    static List<List<Integer>> graph;
+    static int cnt;
+    static boolean[] visit;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        graph = new ArrayList<>();
+        for(int i = 0; i <= N; i++){
+            graph.add(i, new ArrayList<>());
+        }
+
+        for(int i = 0; i < M; i++){
+            st = new StringTokenizer(br.readLine());
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
+            graph.get(from).add(to);
+            graph.get(to).add(from);
+        }
+
+        cnt = 0;
+        visit = new boolean[N+1];
+        for(int i = 1; i <= N; i++){
+            if(!visit[i]){
+                cnt++;
+                func(i);
+//                System.out.println();
+            }
+        }
+
+        bw.write(cnt + "\n");
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+    static void func(int v){
+//        System.out.print(v + " ");
+        visit[v] = true;
+
+        for(int next : graph.get(v)){
+            if(!visit[next]){
+                func(next);
+            }
+        }
+    }
 }
