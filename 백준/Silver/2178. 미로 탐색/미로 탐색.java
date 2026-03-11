@@ -1,57 +1,76 @@
-import java.awt.Point;
 import java.io.*;
 import java.util.*;
 
 public class Main {
-		static int[][] map;
-		static int n;
-		static int m;
-		static boolean[][] visited;
-		static int[] dx = { -1, 1, 0, 0 }; //x방향배열-상하
-	    	static int[] dy = { 0, 0, -1, 1 }; //y방향배열-좌우
+    static class Node{
+        int x;
+        int y;
+        int dist;
+        public Node(int x, int y, int dist){
+            this.x = x;
+            this.y = y;
+            this.dist = dist;
+        }
+    }
+    static int N;
+    static int M;
+    static int[][] map;
+    static int[] dx = {0, 1, 0, -1}; //우 하 좌 상
+    static int[] dy = {1, 0, -1, 0};
+    static int ans = 0;
+    static boolean[][] visit;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-		public static void main(String[] args) throws IOException {
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			n = Integer.parseInt(st.nextToken());
-			m = Integer.parseInt(st.nextToken());
-			
-			map = new int[n][m];
-			for(int i=0; i<n; i++) {
-				String s = br.readLine();
-				for(int j=0; j<m; j++) {
-					map[i][j] = s.charAt(j) - '0';
-				}
-			}
-			
-			visited = new boolean[n][m];
-			visited[0][0] = true;
-			bfs(0, 0);
-			System.out.println(map[n-1][m-1]);
-		}
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        map = new int[N][M];
+        visit = new boolean[N][M];
 
-		public static void bfs(int x, int y) {
-			Queue<int[]> q = new LinkedList<>();
-			q.add(new int[] {x,y});
-			
-			while(!q.isEmpty()) {
-				int now[] = q.poll();
-				int nowX = now[0];
-				int nowY = now[1];
-				
-				for(int i=0; i<4; i++) {
-					int nextX = nowX + dx[i];
-					int nextY = nowY + dy[i];
-					
-			                if (nextX < 0 || nextY < 0 || nextX >= n || nextY >= m)
-	                		    continue;
-	        		        if (visited[nextX][nextY] || map[nextX][nextY] == 0)
-	                    		continue;
-	                    
-			                q.add(new int[] {nextX, nextY});
-	        		        map[nextX][nextY] = map[nowX][nowY] + 1;
-	                		visited[nextX][nextY] = true;
-				}
-			}
-		}
-	}
+        for(int i = 0; i < N; i++){
+            String str = br.readLine();
+            for(int j = 0; j < M; j++){
+                char ch = str.charAt(j);
+                map[i][j] = ch - '0';
+//                System.out.print(map[i][j] + " ");
+            }
+//            System.out.println();
+        }
+
+        bfs();
+
+        bw.write(ans + "\n");
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+    static void bfs(){
+        Queue<Node> q = new ArrayDeque<>();
+        q.add(new Node(0, 0, 1));
+        visit[0][0] = true;
+
+        while(!q.isEmpty()){
+            Node cur = q.poll();
+            int x = cur.x;
+            int y = cur.y;
+            int dist = cur.dist;
+
+            if(x == N-1 && y == M-1){
+                ans = dist;
+                break;
+            }
+
+            for(int dir = 0; dir < 4; dir++){
+                int nx = x + dx[dir];
+                int ny = y + dy[dir];
+                if(nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
+                if(!visit[nx][ny] && map[nx][ny] == 1){
+                    q.add(new Node(nx, ny, dist+1));
+                    visit[nx][ny] = true;
+                }
+            }
+        }
+    }
+}
