@@ -1,0 +1,8 @@
+-- 코드를 입력하세요
+SELECT I.NAME, I.DATETIME
+from ANIMAL_INS I
+left join ANIMAL_OUTS O 
+on I.animal_id = O.animal_id
+where O.animal_id is null
+order by I.DATETIME
+fetch first 3 rows only
