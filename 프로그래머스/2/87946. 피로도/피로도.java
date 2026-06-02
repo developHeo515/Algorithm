@@ -1,23 +1,27 @@
 class Solution {
-    static int max = 0;
-    
+    static int res;
     public int solution(int k, int[][] dungeons) {
-        permutation(k, dungeons, 0, new boolean[dungeons.length]);
-        return max;
+        int answer = -1;
+        res = 0;
+        boolean[] visit = new boolean[dungeons.length];
+        purm(k, dungeons, 0, visit);
+        answer = res;
+
+        return answer;
     }
-    static boolean permutation(int k, int[][] dungeons, int dunCnt, boolean[] visit){
-        if(dunCnt > max){
-            max = dunCnt;
-            if(dunCnt == dungeons.length) return true;
+
+    static void purm(int k, int[][] dungeons, int cnt, boolean[] visit){
+        if(cnt > res){
+            res = cnt;
+            if(res == dungeons.length) return;
         }
 
         for(int i = 0; i < dungeons.length; i++){
             if(!visit[i] && k >= dungeons[i][0]){
                 visit[i] = true;
-                if(permutation(k - dungeons[i][1], dungeons, dunCnt + 1, visit)) return true;
+                purm(k - dungeons[i][1], dungeons, cnt + 1, visit);
                 visit[i] = false;
             }
         }
-        return false;
     }
 }
